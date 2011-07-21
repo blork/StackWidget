@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">StackWidget</string>
+    
+    <string-array name="updates">
+        <item>15 minutes</item>
+        <item>30 minutes</item>
+        <item>1 hour</item>
+        <item>Half day</item>
+        <item>1 day</item>
+    </string-array>
+    <string-array name="updates_values">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+    </string-array>	
+    
+    <string-array name="method">
+        <item>Full website</item>
+        <item>StackMobile (classic)</item>
+        <item>StackMobile (touch)</item>
+    </string-array>
+    <string-array name="method_values">
+        <item>full</item>
+        <item>mobile_classic</item>
+        <item>mobile_touch</item>
+    </string-array>
+    
+    <string-array name="sites">
+        <item>StackOverflow</item>
+        <item>SuperUser</item>
+        <item>ServerFault</item>
+        <item>StackApps</item>
+    </string-array>
+    <string-array name="sites_values">
+        <item>stackoverflow</item>
+        <item>superuser</item>
+        <item>serverfault</item>
+        <item>stackapps</item>
+    </string-array>
+    
+      <string-array name="sort">
+        <item>Hot</item>      
+        <item>Activity</item>
+        <item>Votes</item>
+        <item>Creation</item>
+        <item>Featured</item>
+    </string-array>
+    <string-array name="sort_values">
+        <item>hot</item>
+        <item>activity</item>
+        <item>votes</item>
+        <item>creation</item>
+        <item>featured</item>
+    </string-array>	
+    
+     <string-array name="number">
+        <item>10</item>      
+        <item>20</item>
+        <item>50</item>
+        <item>100</item>
+    </string-array>
+</resources>

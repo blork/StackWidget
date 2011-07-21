@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/settings"
+          android:title="Settings"
+          android:icon="@drawable/settings"/>  
+    <item android:id="@+id/refresh"
+          android:title="Refresh"
+          android:icon="@drawable/refresh"/>  
+    <item android:id="@+id/favourites"
+          android:title="Favourites"
+          android:icon="@drawable/favourites"/>  
+</menu>
+
+<!-- icons from http://glyphish.com/ -->

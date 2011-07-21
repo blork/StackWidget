@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+	<PreferenceCategory android:title="Updates"
+		android:summary="Please select an update schedule."
+		android:key="pref_updates">
+		<ListPreference
+			android:summary="Change update frequency."
+			android:key="updates"
+			android:title="Update Frequency"
+			android:entries="@array/updates"
+			android:entryValues="@array/updates_values"/>
+	</PreferenceCategory>
+	<PreferenceCategory android:title="Favourites"
+		android:summary="Favourites settings."
+		android:key="fav_updates">
+		<CheckBoxPreference
+            android:key="notifications_enabled"
+            android:defaultValue="true"
+            android:title="Notifications"
+            android:summaryOff="You will not receive notifications."
+            android:summaryOn="You will receive notifications when favourited questions are answered." />
+	</PreferenceCategory>
+	<PreferenceCategory android:title="Questions"
+		android:summary="Please select your question options."
+		android:key="pref_questions">
+		<CheckBoxPreference
+            android:key="droidstack"
+            android:defaultValue="false"
+            android:title="Droidstack Integration"
+            android:enabled="false"
+            android:summaryOff="Droidstack must be installed."
+            android:summaryOn="Questions opened in Droidstack." />
+		<ListPreference
+			android:summary="How to view selected questions."
+			android:key="method"
+			android:title="Viewing Questions"
+			android:entries="@array/method"
+			android:entryValues="@array/method_values"/>
+		<ListPreference
+			android:summary="Maximum number of questions to fetch."
+			android:key="num"
+			android:title="Number"
+			android:entries="@array/number"
+			android:entryValues="@array/number"/>
+		<ListPreference
+			android:summary="Change which Stack Exchange site is used."
+			android:key="sites"
+			android:title="Site"
+			android:entries="@array/sites"
+			android:entryValues="@array/sites_values"/>
+		<ListPreference
+			android:summary="Select category for questions."
+			android:key="sort"
+			android:title="Category/Sorting"
+			android:entries="@array/sort"
+			android:entryValues="@array/sort_values"/>			
+		<EditTextPreference
+			android:summary="Enter comma separated tags for questions."
+			android:hint="java,c++,databases"
+			android:key="tags"
+			android:title="Tags"/>
+	</PreferenceCategory>
+</PreferenceScreen>
