@@ -5,11 +5,15 @@ import static android.provider.BaseColumns._ID;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.List;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
+
+import com.blork.sowidget.model.Question;
+import com.blork.sowidget.model.QuestionFactory;
 
 import android.app.AlarmManager;
 import android.app.Notification;
@@ -118,9 +122,7 @@ public class SoService extends Service implements Runnable{
 			NotificationManager mNotificationManager = (NotificationManager) getSystemService(ns);
 			
 			
-			if (site.questionCount > 0){
-				site.saveQuestions();  
-
+			if (site.questions.size() > 0){
 				mNotificationManager.cancelAll();
 			} else {
 		
@@ -146,24 +148,21 @@ public class SoService extends Service implements Runnable{
 			
 			sendBroadcast(new Intent(ACTION_NEW_STACKWIDGET_QUESTIONS));    
 			
-
-			Cursor questionCursor = db.query("questions", new String[] {_ID, "q_id, title, tags, votes, answer_count, user_name"}, 
-	                null, null, null, null, null);
-	        
-	        questionCursor.moveToFirst(); 
-	        
-	        RemoteViews views = new RemoteViews(this.getPackageName(), R.layout.widget);
+			List<Question> questions = QuestionFactory.getSaved(this);
+			Question topQuestion = questions.get(0);
+			
+			RemoteViews views = new RemoteViews(this.getPackageName(), R.layout.widget);
 	        
 	        ComponentName thisWidget = new ComponentName( this, Widget.class );
 	        
 	        views.setViewVisibility(R.id.content, View.VISIBLE);
 	        views.setViewVisibility(R.id.loading, View.GONE);
 	        
-	        views.setTextViewText(R.id.title, questionCursor.getString(questionCursor.getColumnIndex("title")));
-	        views.setTextViewText(R.id.votes, questionCursor.getString(questionCursor.getColumnIndex("votes")));
-	        views.setTextViewText(R.id.answers, questionCursor.getString(questionCursor.getColumnIndex("answer_count")));
+	        views.setTextViewText(R.id.title, topQuestion.getTitle());
+	        views.setTextViewText(R.id.votes, topQuestion.getVotes().toString());
+	        views.setTextViewText(R.id.answers, topQuestion.getAnswerCount().toString());
 	       
-	        String[] tag = questionCursor.getString(questionCursor.getColumnIndex("tags")).split(",");
+	        String[] tag = topQuestion.getTags().split(",");
 	        views.setTextViewText(R.id.tags, tag[0]); 
 	        
 	        Intent qIntent = new Intent(this, QuestionList.class);
@@ -171,9 +170,7 @@ public class SoService extends Service implements Runnable{
 	        views.setOnClickPendingIntent(R.id.content, pendingIntent);
 	        
 	        AppWidgetManager.getInstance(this).updateAppWidget(thisWidget, views); 
-	        
-	        questionCursor.close();
-	        
+	        	        
         }catch(MalformedURLException e){
         	Log.e("sowidget", e.toString());	        	
         }catch(IOException e){
