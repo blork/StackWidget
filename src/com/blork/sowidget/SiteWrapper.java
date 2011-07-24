@@ -9,6 +9,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
+import java.util.List;
 import java.util.zip.GZIPInputStream;
 
 import org.json.JSONArray;
@@ -16,22 +17,21 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
-import android.content.ContentValues;
 import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
 import android.text.TextUtils;
 import android.util.Log;
+
+import com.blork.sowidget.model.Question;
 
 
 public class SiteWrapper {
 	public static final String KEY = "";
 
 	private URL url;
-	private JSONArray questions;
+	private List<Question> questions;
 	private Context context;
 	private String site;
 
-	public int questionCount;
 	static final Double version = 1.0;
 	
 	public SiteWrapper(String site, Context ctx){
@@ -56,8 +56,49 @@ public class SiteWrapper {
 	
 	public void fetchQuestions() throws JSONException, IOException{
         JSONObject json = (JSONObject) new JSONTokener(getJSON(this.url)).nextValue();
-        this.questions = json.getJSONArray("questions");
-        this.questionCount = questions.length();
+        JSONArray questionsJson = json.getJSONArray("questions");
+        
+        for(int x = 0; x < questionsJson.length(); x++){ 
+			try {
+							
+				JSONObject questionObj =  questionsJson.getJSONObject(x);
+												
+				JSONArray tags = questionObj.getJSONArray("tags");
+				
+				String niceTags = "";
+				
+				for(int i = 0; i < tags.length(); i++){
+					if(i != 0){
+						niceTags += ", ";
+					}
+					niceTags += tags.getString(i);
+				}
+									
+				int votes = questionObj.getInt("up_vote_count") - questionObj.getInt("down_vote_count");
+				
+				JSONObject owner = questionObj.getJSONObject("owner");
+				
+				String userName = "Asked by "+owner.getString("display_name");
+
+				Question question = new Question(
+						questionObj.getInt("question_id"),
+						questionObj.getString("title"),
+						niceTags,
+						userName,
+						this.site,
+						votes,
+						questionObj.getInt("answer_count")
+				);
+				
+				//TODO: delete old questions
+				question.save(context);
+				
+				this.questions.add(question);
+				
+			} catch (JSONException e) {
+				Log.e("sowidget", e.toString());
+			}
+		}
 	}
 	
 	
@@ -95,64 +136,6 @@ public class SiteWrapper {
             line = reader.readLine();
         }
         return sb.toString();
-    }
-    
-    
-	
-    public void saveQuestions(){
-    	Log.d("sowidget", "Saving questions to DB...");
-    	Log.d("sowidget","Questions: "+this.questions.length());
-    	if(this.questionCount > 0){
- 	    	
-	    	QuestionData qData = new QuestionData(this.context);
-	    	
-			SQLiteDatabase db = qData.getWritableDatabase();
-			
-			db.delete("questions", null, null);
-			
-			
-		
-			for(int x = 0; x < this.questions.length(); x++){ 
-				try {
-					JSONObject question =  this.questions.getJSONObject(x);
-					
-					ContentValues values = new ContentValues();
-					Log.d("sowidget", "Question ID: "+question.getString("question_id"));
-									
-					JSONArray tags = question.getJSONArray("tags");
-					
-					String niceTags = "";
-					
-					for(int i = 0; i < tags.length(); i++){
-						if(i != 0){
-							niceTags += ", ";
-						}
-						niceTags += tags.getString(i);
-					}
-										
-					int votes = question.getInt("up_vote_count") - question.getInt("down_vote_count");
-					
-					JSONObject owner = question.getJSONObject("owner");
-					String userName = "Asked by "+owner.getString("display_name");
-					
-					
-					values.put("q_id", question.getString("question_id"));
-					values.put("title", question.getString("title"));
-					values.put("tags", niceTags);
-					values.put("votes", votes+" votes");
-					values.put("answer_count", question.getInt("answer_count")+" answers");
-					values.put("user_name", userName);
-					values.put("site", this.site);
-					
-					db.insertOrThrow("questions", null, values);
-					
-				} catch (JSONException e) {
-					Log.e("sowidget", e.toString());
-				}
-			}
-			
-			db.close();
-    	}
     }
 }
 
