@@ -1,11 +1,5 @@
 package com.blork.sowidget.model;
 
-import com.blork.sowidget.provider.QuestionsContentProvider;
-
-import android.content.ContentValues;
-import android.content.Context;
-import android.net.Uri;
-
 public class Question {
 	private Integer questionId;
 	private String title;
@@ -15,15 +9,6 @@ public class Question {
 	private Integer votes;
 	private Integer answerCount;
 	
-	/**
-	 * @param questionId
-	 * @param title
-	 * @param tags
-	 * @param userName
-	 * @param site
-	 * @param votes
-	 * @param answerCount
-	 */
 	public Question(Integer questionId, String title, String tags,
 			String userName, String site, Integer votes, Integer answerCount) {
 		super();
@@ -64,18 +49,4 @@ public class Question {
 		return answerCount;
 	}
 	
-	public Uri save(Context context) {
-		ContentValues values = new ContentValues();
-
-		values.put(QuestionsContentProvider.QUESTION_ID, this.questionId);
-		values.put(QuestionsContentProvider.TITLE, this.title);
-		values.put(QuestionsContentProvider.TAGS, this.tags);
-		values.put(QuestionsContentProvider.USER_NAME, this.userName);
-		values.put(QuestionsContentProvider.SITE, this.site);
-		values.put(QuestionsContentProvider.VOTES, this.votes);
-		values.put(QuestionsContentProvider.ANSWER_COUNT, this.answerCount);
-
-		Uri uri = context.getContentResolver().insert(QuestionsContentProvider.CONTENT_URI, values);
-		return uri;
-	}
 }
