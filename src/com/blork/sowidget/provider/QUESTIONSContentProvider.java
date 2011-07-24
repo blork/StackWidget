@@ -33,6 +33,8 @@ public class QUESTIONSContentProvider extends ContentProvider {
 			+ "/" + TABLE_NAME);
 	public static final Uri TITLE_FIELD_CONTENT_URI = Uri.parse("content://"
 			+ AUTHORITY + "/" + TABLE_NAME.toLowerCase() + "/title");
+	public static final Uri QUESTION_ID_FIELD_CONTENT_URI = Uri.parse("content://"
+			+ AUTHORITY + "/" + TABLE_NAME.toLowerCase() + "/question_id");
 	public static final Uri TAGS_FIELD_CONTENT_URI = Uri.parse("content://"
 			+ AUTHORITY + "/" + TABLE_NAME.toLowerCase() + "/tags");
 	public static final Uri VOTES_FIELD_CONTENT_URI = Uri.parse("content://"
@@ -46,19 +48,21 @@ public class QUESTIONSContentProvider extends ContentProvider {
 	public static final Uri SITE_FIELD_CONTENT_URI = Uri.parse("content://"
 			+ AUTHORITY + "/" + TABLE_NAME.toLowerCase() + "/site");
 
-	public static final String DEFAULT_SORT_ORDER = "title ASC";
+	public static final String DEFAULT_SORT_ORDER = "question_id desc";
 
 	private static final UriMatcher URL_MATCHER;
 
 	private static final int QUESTIONS = 1;
-	private static final int QUESTIONS_TITLE = 2;
-	private static final int QUESTIONS_TAGS = 3;
-	private static final int QUESTIONS_VOTES = 4;
-	private static final int QUESTIONS_ANSWER_COUNT = 5;
-	private static final int QUESTIONS_USER_NAME = 6;
-	private static final int QUESTIONS_SITE = 7;
+	private static final int QUESTIONS_QUESTION_ID = 2;
+	private static final int QUESTIONS_TITLE = 3;
+	private static final int QUESTIONS_TAGS = 4;
+	private static final int QUESTIONS_VOTES = 5;
+	private static final int QUESTIONS_ANSWER_COUNT = 6;
+	private static final int QUESTIONS_USER_NAME = 7;
+	private static final int QUESTIONS_SITE = 8;
 
 	// Content values keys (using column names)
+	public static final String QUESTION_ID = "question_id";
 	public static final String TITLE = "title";
 	public static final String TAGS = "tags";
 	public static final String VOTES = "votes";
@@ -79,6 +83,10 @@ public class QUESTIONSContentProvider extends ContentProvider {
 		case QUESTIONS:
 			qb.setTables(TABLE_NAME);
 			qb.setProjectionMap(QUESTIONS_PROJECTION_MAP);
+			break;
+		case QUESTIONS_QUESTION_ID:
+			qb.setTables(TABLE_NAME);
+			qb.appendWhere("question_id='" + url.getPathSegments().get(2) + "'");
 			break;
 		case QUESTIONS_TITLE:
 			qb.setTables(TABLE_NAME);
@@ -125,6 +133,8 @@ public class QUESTIONSContentProvider extends ContentProvider {
 		switch (URL_MATCHER.match(url)) {
 		case QUESTIONS:
 			return "vnd.android.cursor.dir/vnd.com.blork.sowidget.provider.questions";
+		case QUESTIONS_QUESTION_ID:
+			return "vnd.android.cursor.item/vnd.com.blork.sowidget.provider.questions";
 		case QUESTIONS_TITLE:
 			return "vnd.android.cursor.item/vnd.com.blork.sowidget.provider.questions";
 		case QUESTIONS_TAGS:
@@ -172,6 +182,14 @@ public class QUESTIONSContentProvider extends ContentProvider {
 		switch (URL_MATCHER.match(url)) {
 		case QUESTIONS:
 			count = mDB.delete(TABLE_NAME, where, whereArgs);
+			break;
+		case QUESTIONS_QUESTION_ID:
+			segment = "'" + url.getPathSegments().get(2) + "'";
+			count = mDB.delete(TABLE_NAME,
+					"question_id="
+							+ segment
+							+ (!TextUtils.isEmpty(where) ? " AND (" + where
+									+ ')' : ""), whereArgs);
 			break;
 		case QUESTIONS_TITLE:
 			segment = "'" + url.getPathSegments().get(2) + "'";
@@ -238,6 +256,14 @@ public class QUESTIONSContentProvider extends ContentProvider {
 		case QUESTIONS:
 			count = mDB.update(TABLE_NAME, values, where, whereArgs);
 			break;
+		case QUESTIONS_QUESTION_ID:
+			segment = "'" + url.getPathSegments().get(2) + "'";
+			count = mDB.update(TABLE_NAME, values,
+					"question_id="
+							+ segment
+							+ (!TextUtils.isEmpty(where) ? " AND (" + where
+									+ ')' : ""), whereArgs);
+			break;
 		case QUESTIONS_TITLE:
 			segment = "'" + url.getPathSegments().get(2) + "'";
 			count = mDB.update(TABLE_NAME, values,
@@ -297,6 +323,8 @@ public class QUESTIONSContentProvider extends ContentProvider {
 	static {
 		URL_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
 		URL_MATCHER.addURI(AUTHORITY, TABLE_NAME.toLowerCase(), QUESTIONS);
+		URL_MATCHER.addURI(AUTHORITY, TABLE_NAME.toLowerCase() + "/question_id"
+				+ "/*", QUESTIONS_QUESTION_ID);
 		URL_MATCHER.addURI(AUTHORITY, TABLE_NAME.toLowerCase() + "/title"
 				+ "/*", QUESTIONS_TITLE);
 		URL_MATCHER.addURI(AUTHORITY,
@@ -311,6 +339,7 @@ public class QUESTIONSContentProvider extends ContentProvider {
 				TABLE_NAME.toLowerCase() + "/site" + "/*", QUESTIONS_SITE);
 
 		QUESTIONS_PROJECTION_MAP = new HashMap<String, String>();
+		QUESTIONS_PROJECTION_MAP.put(QUESTION_ID, "question_id");
 		QUESTIONS_PROJECTION_MAP.put(TITLE, "title");
 		QUESTIONS_PROJECTION_MAP.put(TAGS, "tags");
 		QUESTIONS_PROJECTION_MAP.put(VOTES, "votes");
