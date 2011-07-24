@@ -26,17 +26,17 @@ import android.util.Log;
 public class SiteWrapper {
 	public static final String KEY = "";
 
-	private static URL url;
-	private static JSONArray questions;
-	private static Context context;
-	private static String site;
+	private URL url;
+	private JSONArray questions;
+	private Context context;
+	private String site;
 
 	public int questionCount;
 	static final Double version = 1.0;
 	
 	public SiteWrapper(String site, Context ctx){
-		SiteWrapper.context = ctx;
-		SiteWrapper.site = site; 
+		this.context = ctx;
+		this.site = site; 
 	}
 	
 	public void setURL(String sort, Boolean body, Boolean answers, String[] tags, int num) throws MalformedURLException, UnsupportedEncodingException{
@@ -51,12 +51,12 @@ public class SiteWrapper {
 														+"&tagged="+URLEncoder.encode(tagged, "UTF-8")
 														+"&pagesize="+num;
 		Log.d("sowidget", baseUrl);
-		SiteWrapper.url = new URL(baseUrl);
+		this.url = new URL(baseUrl);
 	}
 	
 	public void fetchQuestions() throws JSONException, IOException{
-        JSONObject json = (JSONObject) new JSONTokener(getJSON(SiteWrapper.url)).nextValue();
-        SiteWrapper.questions = json.getJSONArray("questions");
+        JSONObject json = (JSONObject) new JSONTokener(getJSON(this.url)).nextValue();
+        this.questions = json.getJSONArray("questions");
         this.questionCount = questions.length();
 	}
 	
@@ -101,10 +101,10 @@ public class SiteWrapper {
 	
     public void saveQuestions(){
     	Log.d("sowidget", "Saving questions to DB...");
-    	Log.d("sowidget","Questions: "+SiteWrapper.questions.length());
+    	Log.d("sowidget","Questions: "+this.questions.length());
     	if(this.questionCount > 0){
  	    	
-	    	QuestionData qData = new QuestionData(SiteWrapper.context);
+	    	QuestionData qData = new QuestionData(this.context);
 	    	
 			SQLiteDatabase db = qData.getWritableDatabase();
 			
@@ -112,9 +112,9 @@ public class SiteWrapper {
 			
 			
 		
-			for(int x = 0; x < SiteWrapper.questions.length(); x++){ 
+			for(int x = 0; x < this.questions.length(); x++){ 
 				try {
-					JSONObject question =  SiteWrapper.questions.getJSONObject(x);
+					JSONObject question =  this.questions.getJSONObject(x);
 					
 					ContentValues values = new ContentValues();
 					Log.d("sowidget", "Question ID: "+question.getString("question_id"));
@@ -142,7 +142,7 @@ public class SiteWrapper {
 					values.put("votes", votes+" votes");
 					values.put("answer_count", question.getInt("answer_count")+" answers");
 					values.put("user_name", userName);
-					values.put("site", SiteWrapper.site);
+					values.put("site", this.site);
 					
 					db.insertOrThrow("questions", null, values);
 					
