@@ -28,7 +28,7 @@ public class SiteWrapper {
 	public static final String KEY = "";
 
 	private URL url;
-	private List<Question> questions;
+	public List<Question> questions;
 	private Context context;
 	private String site;
 
