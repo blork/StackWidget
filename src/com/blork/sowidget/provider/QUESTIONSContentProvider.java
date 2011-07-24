@@ -22,7 +22,7 @@ import android.text.*;
 
 import com.blork.sowidget.sql.*;
 
-public class QuestionsContentProvider extends ContentProvider {
+public class QUESTIONSContentProvider extends ContentProvider {
 
 	private QuestionsSQLHelper dbHelper;
 	private static HashMap<String, String> QUESTIONS_PROJECTION_MAP;
