@@ -1,6 +1,9 @@
 package com.blork.sowidget;
 
 import static android.provider.BaseColumns._ID;
+
+import com.blork.sowidget.adapter.EndlessQuestionAdapter;
+
 import android.app.ListActivity;
 import android.content.BroadcastReceiver;
 import android.content.ContentValues;
@@ -102,6 +105,7 @@ public class QuestionList extends ListActivity {
         int[] displayViews = new int[] { R.id.id, R.id.title, R.id.tags, R.id.votes, R.id.answers, R.id.user, R.id.site };
 
         String[] displayFields = new String[] { "q_id", "title", "tags", "votes", "answer_count", "user_name", "site"};  
+        
         
         setListAdapter(new SimpleCursorAdapter(this, 
                        R.layout.question_list_item, questionCursor, 
