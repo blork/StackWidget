@@ -3,14 +3,14 @@ package com.blork.sowidget.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.app.Activity;
+import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 
 import com.blork.sowidget.provider.QuestionsContentProvider;
 
 public class QuestionFactory {
-	public static List<Question> getSaved(Activity activity) {
+	public static List<Question> getSaved(Context context) {
 
 
 		String[] projection = new String[] {
@@ -26,7 +26,7 @@ public class QuestionFactory {
 		Uri questions = QuestionsContentProvider.CONTENT_URI;
 
 		//Make the query. 
-		Cursor managedCursor = activity.managedQuery(questions,
+		Cursor cursor = context.getContentResolver().query(questions,
 				projection, // Which columns to return 
 				null,       // Which rows to return (all rows)
 				null,       // Selection arguments (none)
@@ -35,34 +35,36 @@ public class QuestionFactory {
 
 		ArrayList<Question> questionList = new ArrayList<Question>();
 
-		if (managedCursor.moveToFirst()) {
+		if (cursor.moveToFirst()) {
 
-			int idColumn = managedCursor.getColumnIndex(QuestionsContentProvider.QUESTION_ID); 
-			int titleColumn = managedCursor.getColumnIndex(QuestionsContentProvider.TITLE); 
-			int tagsColumn = managedCursor.getColumnIndex(QuestionsContentProvider.TAGS); 
-			int userNameColumn = managedCursor.getColumnIndex(QuestionsContentProvider.USER_NAME); 
-			int siteColumn = managedCursor.getColumnIndex(QuestionsContentProvider.SITE); 
-			int votesColumn = managedCursor.getColumnIndex(QuestionsContentProvider.VOTES); 
-			int answerCountColumn = managedCursor.getColumnIndex(QuestionsContentProvider.ANSWER_COUNT); 
+			int idColumn = cursor.getColumnIndex(QuestionsContentProvider.QUESTION_ID); 
+			int titleColumn = cursor.getColumnIndex(QuestionsContentProvider.TITLE); 
+			int tagsColumn = cursor.getColumnIndex(QuestionsContentProvider.TAGS); 
+			int userNameColumn = cursor.getColumnIndex(QuestionsContentProvider.USER_NAME); 
+			int siteColumn = cursor.getColumnIndex(QuestionsContentProvider.SITE); 
+			int votesColumn = cursor.getColumnIndex(QuestionsContentProvider.VOTES); 
+			int answerCountColumn = cursor.getColumnIndex(QuestionsContentProvider.ANSWER_COUNT); 
 
 
 			do {
 
 				Question question = new Question(
-						managedCursor.getInt(idColumn),
-						managedCursor.getString(titleColumn),
-						managedCursor.getString(tagsColumn),
-						managedCursor.getString(userNameColumn),
-						managedCursor.getString(siteColumn),
-						managedCursor.getInt(votesColumn),
-						managedCursor.getInt(answerCountColumn)
+						cursor.getInt(idColumn),
+						cursor.getString(titleColumn),
+						cursor.getString(tagsColumn),
+						cursor.getString(userNameColumn),
+						cursor.getString(siteColumn),
+						cursor.getInt(votesColumn),
+						cursor.getInt(answerCountColumn)
 				);
 				
 				questionList.add(question);
 
-			} while (managedCursor.moveToNext());
+			} while (cursor.moveToNext());
 
 		}
+		
+		cursor.close();
 
 		return questionList;
 	}
