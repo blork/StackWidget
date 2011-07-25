@@ -1,101 +1,112 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
-android:layout_width="fill_parent"
-android:layout_height="fill_parent"
-xmlns:android="http://schemas.android.com/apk/res/android"
-android:gravity="center_vertical"
-android:padding="5dp"
->
-	<TextView
-		android:id="@+id/title"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:gravity="center_vertical"
+	android:padding="5dp">
+	<RelativeLayout
+		android:id="@+id/list_container"
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
+		android:gravity="center_vertical">
+		<TextView
+			android:id="@+id/title"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:text="this is a title"
+			android:textSize="14sp"
+			android:textColor="#ff000000"
+			android:layout_alignParentTop="true"
+			android:layout_alignParentLeft="true"
+			android:gravity="center_vertical"
+			android:layout_marginBottom="5dp" />
+
+
+		<TextView
+			android:id="@+id/votes"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="0"
+			android:textSize="10sp"
+			android:typeface="monospace"
+			android:textColor="#ff555555"
+			android:layout_alignParentLeft="true"
+			android:layout_below="@+id/title"
+			android:gravity="center"
+			android:singleLine="true"
+			android:ellipsize="marquee"
+			android:padding="3dp" />
+
+
+		<TextView
+			android:id="@+id/answers"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="0"
+			android:textSize="10sp"
+			android:typeface="monospace"
+			android:textColor="#75845C"
+			android:layout_toRightOf="@+id/votes"
+			android:layout_below="@+id/title"
+			android:gravity="center"
+			android:singleLine="true"
+			android:ellipsize="marquee"
+			android:padding="3dp" />
+		<TextView
+			android:id="@+id/user"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:text="user name"
+			android:textSize="10sp"
+			android:textColor="#ff666666"
+			android:layout_below="@+id/title"
+			android:layout_toRightOf="@+id/votes"
+			android:gravity="right|center_vertical"
+			android:padding="3dp"
+			android:typeface="monospace" />
+		<TextView
+			android:id="@+id/tags"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="hello"
+			android:textSize="10sp"
+			android:typeface="monospace"
+			android:layout_alignParentRight="true"
+			android:layout_below="@+id/answers"
+			android:gravity="center_vertical"
+			android:textColor="#3E6D8E"
+			android:singleLine="true"
+			android:ellipsize="marquee"
+			android:padding="5dp" />
+
+		<TextView
+			android:id="@+id/id"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:visibility="gone" />
+
+		<TextView
+			android:id="@+id/site"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:visibility="gone" />
+	</RelativeLayout>
+	<RelativeLayout
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
-		android:text="this is a title"
-		android:textSize="14sp"
-		android:textColor="#ff000000"
-		android:layout_alignParentTop="true"
-		android:layout_alignParentLeft="true"
-		android:gravity="center_vertical"
-		android:layout_marginBottom="5dp"
-	/>
-
-
-	<TextView
-		android:id="@+id/votes"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:text="0"
-		android:textSize="10sp"
-		android:typeface="monospace"
-		android:textColor="#ff555555"
-		android:layout_alignParentLeft="true"
-		android:layout_below="@+id/title"
-		android:gravity="center"
-		android:singleLine="true"
-		android:ellipsize="marquee"
-		android:padding="3dp"
-	/>
-	
-
-	<TextView
-		android:id="@+id/answers"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:text="0"
-		android:textSize="10sp"
-		android:typeface="monospace"
-		android:textColor="#75845C"
-		android:layout_toRightOf="@+id/votes"
-		android:layout_below="@+id/title"
-		android:gravity="center"
-		android:singleLine="true"
-		android:ellipsize="marquee" 
-		android:padding="3dp"
-	
-	/>
-		<TextView
-		android:id="@+id/user"
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
-		android:text="user name"
-		android:textSize="10sp"
-		android:textColor="#ff666666"
-		android:layout_below="@+id/title"
-		android:layout_toRightOf="@+id/votes"
-		android:gravity="right|center_vertical"
-		android:padding="3dp"
-		android:typeface="monospace"
-	
-	/>
-	<TextView
-		android:id="@+id/tags"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:text="hello"
-		android:textSize="10sp"
-		android:typeface="monospace"
-		android:layout_alignParentRight="true"
-		android:layout_below="@+id/answers"
-		android:gravity="center_vertical"
-		android:textColor="#3E6D8E"
-		android:singleLine="true"
-		android:ellipsize="marquee"
-		android:padding="5dp"
-		
-	/>		
-
-		<TextView
-		android:id="@+id/id"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:visibility="gone"
-	/>
-
-		<TextView
-		android:id="@+id/site"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:visibility="gone"
-	/>
-
+		xmlns:android="http://schemas.android.com/apk/res/android"
+		android:gravity="center">
+		<ProgressBar
+			android:id="@+id/throbber"
+			style="@android:style/Widget.ProgressBar.Small.Inverse"
+			android:gravity="center"
+			android:indeterminate="true"
+			android:padding="10dp"
+			android:layout_gravity="center"
+			android:layout_centerInParent="true"
+			android:visibility="gone"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content" />
+	</RelativeLayout>
 </RelativeLayout>
