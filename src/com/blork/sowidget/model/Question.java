@@ -118,4 +118,9 @@ public class Question {
 		);
 		return deletedRows == 1;
 	}
+
+	@Override
+	public String toString() {
+		return "Question [questionId=" + questionId + ", title=" + title + "]";
+	}
 }
