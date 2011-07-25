@@ -28,11 +28,11 @@ import android.database.sqlite.SQLiteOpenHelper;
  * This class copies a SQLite database from your application's assets directory
  * to /data/data/<your_application_package>/databases/ so you can access it
  * using the SQLite APIs provided by the Android SDK. Note that
- * {@link QuestionsSQLHelper#copyDatabaseFile()} checks for the existence of the
- * database and only copies it if needed.
+ * {@link SqlHelper#copyDatabaseFile()} checks for the existence of the database
+ * and only copies it if needed.
  * </p>
  * <p>
- * {@link QuestionsSQLHelper#copyDatabaseFile()} calls
+ * {@link SqlHelper#copyDatabaseFile()} calls
  * {@link SQLiteOpenHelper#getReadableDatabase()}, which in turn calls
  * {@link SQLiteOpenHelper#onCreate(SQLiteDatabase)}. Be aware that the
  * implementation of the overridden
@@ -41,14 +41,13 @@ import android.database.sqlite.SQLiteOpenHelper;
  * </p>
  * <p>
  * This class includes a constructor
- * {@link QuestionsSQLHelper#QuestionsSQLHelper(Context, boolean)} which allows
- * you to control whether the database file should be copied when the class is
- * instantiated.
+ * {@link SqlHelper#SqlHelper(Context, boolean)} which allows you to control
+ * whether the database file should be copied when the class is instantiated.
  * </p>
  * 
  * @see SQLiteOpenHelper
  */
-public class QuestionsSQLHelper extends SQLiteOpenHelper {
+public class SqlHelper extends SQLiteOpenHelper {
 
 	// Android's default system path for your application's database.
 	private static String DB_PATH = "/data/data/com.blork.sowidget/databases/";
@@ -64,7 +63,7 @@ public class QuestionsSQLHelper extends SQLiteOpenHelper {
 	 * @param context
 	 *            Context to be used
 	 */
-	public QuestionsSQLHelper(Context context) {
+	public SqlHelper(Context context) {
 
 		super(context, DB_NAME, null, 1);
 		this.myContext = context;
@@ -81,7 +80,7 @@ public class QuestionsSQLHelper extends SQLiteOpenHelper {
 	 *            If <code>true</code>, the database file is copied (if it does
 	 *            not already exist)
 	 */
-	public QuestionsSQLHelper(Context context, boolean copyDatabase) {
+	public SqlHelper(Context context, boolean copyDatabase) {
 		// call overloaded constructor
 		this(context);
 		// copy database file in case desired

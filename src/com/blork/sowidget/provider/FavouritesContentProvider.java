@@ -22,12 +22,12 @@ import android.text.*;
 
 import com.blork.sowidget.sql.*;
 
-public class QuestionsContentProvider extends ContentProvider {
+public class FavouritesContentProvider extends ContentProvider {
 
 	private SqlHelper dbHelper;
-	private static HashMap<String, String> QUESTIONS_PROJECTION_MAP;
-	private static final String TABLE_NAME = "questions";
-	private static final String AUTHORITY = "com.blork.sowidget.provider.questionscontentprovider";
+	private static HashMap<String, String> FAVOURITES_PROJECTION_MAP;
+	private static final String TABLE_NAME = "favourites";
+	private static final String AUTHORITY = "com.blork.sowidget.provider.favouritescontentprovider";
 
 	public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY
 			+ "/" + TABLE_NAME);
@@ -53,14 +53,14 @@ public class QuestionsContentProvider extends ContentProvider {
 
 	private static final UriMatcher URL_MATCHER;
 
-	private static final int QUESTIONS = 1;
-	private static final int QUESTIONS_QUESTION_ID = 2;
-	private static final int QUESTIONS_TITLE = 3;
-	private static final int QUESTIONS_TAGS = 4;
-	private static final int QUESTIONS_VOTES = 5;
-	private static final int QUESTIONS_ANSWER_COUNT = 6;
-	private static final int QUESTIONS_USER_NAME = 7;
-	private static final int QUESTIONS_SITE = 8;
+	private static final int FAVOURITES = 1;
+	private static final int FAVOURITES_QUESTION_ID = 2;
+	private static final int FAVOURITES_TITLE = 3;
+	private static final int FAVOURITES_TAGS = 4;
+	private static final int FAVOURITES_VOTES = 5;
+	private static final int FAVOURITES_ANSWER_COUNT = 6;
+	private static final int FAVOURITES_USER_NAME = 7;
+	private static final int FAVOURITES_SITE = 8;
 
 	// Content values keys (using column names)
 	public static final String QUESTION_ID = "question_id";
@@ -81,36 +81,36 @@ public class QuestionsContentProvider extends ContentProvider {
 		SQLiteDatabase mDB = dbHelper.getReadableDatabase();
 		SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
 		switch (URL_MATCHER.match(url)) {
-		case QUESTIONS:
+		case FAVOURITES:
 			qb.setTables(TABLE_NAME);
-			qb.setProjectionMap(QUESTIONS_PROJECTION_MAP);
+			qb.setProjectionMap(FAVOURITES_PROJECTION_MAP);
 			break;
-		case QUESTIONS_QUESTION_ID:
+		case FAVOURITES_QUESTION_ID:
 			qb.setTables(TABLE_NAME);
 			qb.appendWhere("question_id='" + url.getPathSegments().get(2) + "'");
 			break;
-		case QUESTIONS_TITLE:
+		case FAVOURITES_TITLE:
 			qb.setTables(TABLE_NAME);
 			qb.appendWhere("title='" + url.getPathSegments().get(2) + "'");
 			break;
-		case QUESTIONS_TAGS:
+		case FAVOURITES_TAGS:
 			qb.setTables(TABLE_NAME);
 			qb.appendWhere("tags='" + url.getPathSegments().get(2) + "'");
 			break;
-		case QUESTIONS_VOTES:
+		case FAVOURITES_VOTES:
 			qb.setTables(TABLE_NAME);
 			qb.appendWhere("votes='" + url.getPathSegments().get(2) + "'");
 			break;
-		case QUESTIONS_ANSWER_COUNT:
+		case FAVOURITES_ANSWER_COUNT:
 			qb.setTables(TABLE_NAME);
 			qb.appendWhere("answer_count='" + url.getPathSegments().get(2)
 					+ "'");
 			break;
-		case QUESTIONS_USER_NAME:
+		case FAVOURITES_USER_NAME:
 			qb.setTables(TABLE_NAME);
 			qb.appendWhere("user_name='" + url.getPathSegments().get(2) + "'");
 			break;
-		case QUESTIONS_SITE:
+		case FAVOURITES_SITE:
 			qb.setTables(TABLE_NAME);
 			qb.appendWhere("site='" + url.getPathSegments().get(2) + "'");
 			break;
@@ -132,22 +132,22 @@ public class QuestionsContentProvider extends ContentProvider {
 
 	public String getType(Uri url) {
 		switch (URL_MATCHER.match(url)) {
-		case QUESTIONS:
-			return "vnd.android.cursor.dir/vnd.com.blork.sowidget.provider.questions";
-		case QUESTIONS_QUESTION_ID:
-			return "vnd.android.cursor.item/vnd.com.blork.sowidget.provider.questions";
-		case QUESTIONS_TITLE:
-			return "vnd.android.cursor.item/vnd.com.blork.sowidget.provider.questions";
-		case QUESTIONS_TAGS:
-			return "vnd.android.cursor.item/vnd.com.blork.sowidget.provider.questions";
-		case QUESTIONS_VOTES:
-			return "vnd.android.cursor.item/vnd.com.blork.sowidget.provider.questions";
-		case QUESTIONS_ANSWER_COUNT:
-			return "vnd.android.cursor.item/vnd.com.blork.sowidget.provider.questions";
-		case QUESTIONS_USER_NAME:
-			return "vnd.android.cursor.item/vnd.com.blork.sowidget.provider.questions";
-		case QUESTIONS_SITE:
-			return "vnd.android.cursor.item/vnd.com.blork.sowidget.provider.questions";
+		case FAVOURITES:
+			return "vnd.android.cursor.dir/vnd.com.blork.sowidget.provider.favourites";
+		case FAVOURITES_QUESTION_ID:
+			return "vnd.android.cursor.item/vnd.com.blork.sowidget.provider.favourites";
+		case FAVOURITES_TITLE:
+			return "vnd.android.cursor.item/vnd.com.blork.sowidget.provider.favourites";
+		case FAVOURITES_TAGS:
+			return "vnd.android.cursor.item/vnd.com.blork.sowidget.provider.favourites";
+		case FAVOURITES_VOTES:
+			return "vnd.android.cursor.item/vnd.com.blork.sowidget.provider.favourites";
+		case FAVOURITES_ANSWER_COUNT:
+			return "vnd.android.cursor.item/vnd.com.blork.sowidget.provider.favourites";
+		case FAVOURITES_USER_NAME:
+			return "vnd.android.cursor.item/vnd.com.blork.sowidget.provider.favourites";
+		case FAVOURITES_SITE:
+			return "vnd.android.cursor.item/vnd.com.blork.sowidget.provider.favourites";
 
 		default:
 			throw new IllegalArgumentException("Unknown URL " + url);
@@ -163,11 +163,11 @@ public class QuestionsContentProvider extends ContentProvider {
 		} else {
 			values = new ContentValues();
 		}
-		if (URL_MATCHER.match(url) != QUESTIONS) {
+		if (URL_MATCHER.match(url) != FAVOURITES) {
 			throw new IllegalArgumentException("Unknown URL " + url);
 		}
 
-		rowID = mDB.insert("questions", "questions", values);
+		rowID = mDB.insert("favourites", "favourites", values);
 		if (rowID > 0) {
 			Uri uri = ContentUris.withAppendedId(CONTENT_URI, rowID);
 			getContext().getContentResolver().notifyChange(uri, null);
@@ -181,10 +181,10 @@ public class QuestionsContentProvider extends ContentProvider {
 		int count;
 		String segment = "";
 		switch (URL_MATCHER.match(url)) {
-		case QUESTIONS:
+		case FAVOURITES:
 			count = mDB.delete(TABLE_NAME, where, whereArgs);
 			break;
-		case QUESTIONS_QUESTION_ID:
+		case FAVOURITES_QUESTION_ID:
 			segment = "'" + url.getPathSegments().get(2) + "'";
 			count = mDB.delete(TABLE_NAME,
 					"question_id="
@@ -192,7 +192,7 @@ public class QuestionsContentProvider extends ContentProvider {
 							+ (!TextUtils.isEmpty(where) ? " AND (" + where
 									+ ')' : ""), whereArgs);
 			break;
-		case QUESTIONS_TITLE:
+		case FAVOURITES_TITLE:
 			segment = "'" + url.getPathSegments().get(2) + "'";
 			count = mDB.delete(TABLE_NAME,
 					"title="
@@ -200,7 +200,7 @@ public class QuestionsContentProvider extends ContentProvider {
 							+ (!TextUtils.isEmpty(where) ? " AND (" + where
 									+ ')' : ""), whereArgs);
 			break;
-		case QUESTIONS_TAGS:
+		case FAVOURITES_TAGS:
 			segment = "'" + url.getPathSegments().get(2) + "'";
 			count = mDB.delete(TABLE_NAME,
 					"tags="
@@ -208,7 +208,7 @@ public class QuestionsContentProvider extends ContentProvider {
 							+ (!TextUtils.isEmpty(where) ? " AND (" + where
 									+ ')' : ""), whereArgs);
 			break;
-		case QUESTIONS_VOTES:
+		case FAVOURITES_VOTES:
 			segment = "'" + url.getPathSegments().get(2) + "'";
 			count = mDB.delete(TABLE_NAME,
 					"votes="
@@ -216,7 +216,7 @@ public class QuestionsContentProvider extends ContentProvider {
 							+ (!TextUtils.isEmpty(where) ? " AND (" + where
 									+ ')' : ""), whereArgs);
 			break;
-		case QUESTIONS_ANSWER_COUNT:
+		case FAVOURITES_ANSWER_COUNT:
 			segment = "'" + url.getPathSegments().get(2) + "'";
 			count = mDB.delete(TABLE_NAME,
 					"answer_count="
@@ -224,7 +224,7 @@ public class QuestionsContentProvider extends ContentProvider {
 							+ (!TextUtils.isEmpty(where) ? " AND (" + where
 									+ ')' : ""), whereArgs);
 			break;
-		case QUESTIONS_USER_NAME:
+		case FAVOURITES_USER_NAME:
 			segment = "'" + url.getPathSegments().get(2) + "'";
 			count = mDB.delete(TABLE_NAME,
 					"user_name="
@@ -232,7 +232,7 @@ public class QuestionsContentProvider extends ContentProvider {
 							+ (!TextUtils.isEmpty(where) ? " AND (" + where
 									+ ')' : ""), whereArgs);
 			break;
-		case QUESTIONS_SITE:
+		case FAVOURITES_SITE:
 			segment = "'" + url.getPathSegments().get(2) + "'";
 			count = mDB.delete(TABLE_NAME,
 					"site="
@@ -254,10 +254,10 @@ public class QuestionsContentProvider extends ContentProvider {
 		int count;
 		String segment = "";
 		switch (URL_MATCHER.match(url)) {
-		case QUESTIONS:
+		case FAVOURITES:
 			count = mDB.update(TABLE_NAME, values, where, whereArgs);
 			break;
-		case QUESTIONS_QUESTION_ID:
+		case FAVOURITES_QUESTION_ID:
 			segment = "'" + url.getPathSegments().get(2) + "'";
 			count = mDB.update(TABLE_NAME, values,
 					"question_id="
@@ -265,7 +265,7 @@ public class QuestionsContentProvider extends ContentProvider {
 							+ (!TextUtils.isEmpty(where) ? " AND (" + where
 									+ ')' : ""), whereArgs);
 			break;
-		case QUESTIONS_TITLE:
+		case FAVOURITES_TITLE:
 			segment = "'" + url.getPathSegments().get(2) + "'";
 			count = mDB.update(TABLE_NAME, values,
 					"title="
@@ -273,7 +273,7 @@ public class QuestionsContentProvider extends ContentProvider {
 							+ (!TextUtils.isEmpty(where) ? " AND (" + where
 									+ ')' : ""), whereArgs);
 			break;
-		case QUESTIONS_TAGS:
+		case FAVOURITES_TAGS:
 			segment = "'" + url.getPathSegments().get(2) + "'";
 			count = mDB.update(TABLE_NAME, values,
 					"tags="
@@ -281,7 +281,7 @@ public class QuestionsContentProvider extends ContentProvider {
 							+ (!TextUtils.isEmpty(where) ? " AND (" + where
 									+ ')' : ""), whereArgs);
 			break;
-		case QUESTIONS_VOTES:
+		case FAVOURITES_VOTES:
 			segment = "'" + url.getPathSegments().get(2) + "'";
 			count = mDB.update(TABLE_NAME, values,
 					"votes="
@@ -289,7 +289,7 @@ public class QuestionsContentProvider extends ContentProvider {
 							+ (!TextUtils.isEmpty(where) ? " AND (" + where
 									+ ')' : ""), whereArgs);
 			break;
-		case QUESTIONS_ANSWER_COUNT:
+		case FAVOURITES_ANSWER_COUNT:
 			segment = "'" + url.getPathSegments().get(2) + "'";
 			count = mDB.update(TABLE_NAME, values,
 					"answer_count="
@@ -297,7 +297,7 @@ public class QuestionsContentProvider extends ContentProvider {
 							+ (!TextUtils.isEmpty(where) ? " AND (" + where
 									+ ')' : ""), whereArgs);
 			break;
-		case QUESTIONS_USER_NAME:
+		case FAVOURITES_USER_NAME:
 			segment = "'" + url.getPathSegments().get(2) + "'";
 			count = mDB.update(TABLE_NAME, values,
 					"user_name="
@@ -305,7 +305,7 @@ public class QuestionsContentProvider extends ContentProvider {
 							+ (!TextUtils.isEmpty(where) ? " AND (" + where
 									+ ')' : ""), whereArgs);
 			break;
-		case QUESTIONS_SITE:
+		case FAVOURITES_SITE:
 			segment = "'" + url.getPathSegments().get(2) + "'";
 			count = mDB.update(TABLE_NAME, values,
 					"site="
@@ -323,30 +323,30 @@ public class QuestionsContentProvider extends ContentProvider {
 
 	static {
 		URL_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
-		URL_MATCHER.addURI(AUTHORITY, TABLE_NAME.toLowerCase(), QUESTIONS);
+		URL_MATCHER.addURI(AUTHORITY, TABLE_NAME.toLowerCase(), FAVOURITES);
 		URL_MATCHER.addURI(AUTHORITY, TABLE_NAME.toLowerCase() + "/question_id"
-				+ "/*", QUESTIONS_QUESTION_ID);
+				+ "/*", FAVOURITES_QUESTION_ID);
 		URL_MATCHER.addURI(AUTHORITY, TABLE_NAME.toLowerCase() + "/title"
-				+ "/*", QUESTIONS_TITLE);
+				+ "/*", FAVOURITES_TITLE);
 		URL_MATCHER.addURI(AUTHORITY,
-				TABLE_NAME.toLowerCase() + "/tags" + "/*", QUESTIONS_TAGS);
+				TABLE_NAME.toLowerCase() + "/tags" + "/*", FAVOURITES_TAGS);
 		URL_MATCHER.addURI(AUTHORITY, TABLE_NAME.toLowerCase() + "/votes"
-				+ "/*", QUESTIONS_VOTES);
+				+ "/*", FAVOURITES_VOTES);
 		URL_MATCHER.addURI(AUTHORITY, TABLE_NAME.toLowerCase()
-				+ "/answer_count" + "/*", QUESTIONS_ANSWER_COUNT);
+				+ "/answer_count" + "/*", FAVOURITES_ANSWER_COUNT);
 		URL_MATCHER.addURI(AUTHORITY, TABLE_NAME.toLowerCase() + "/user_name"
-				+ "/*", QUESTIONS_USER_NAME);
+				+ "/*", FAVOURITES_USER_NAME);
 		URL_MATCHER.addURI(AUTHORITY,
-				TABLE_NAME.toLowerCase() + "/site" + "/*", QUESTIONS_SITE);
+				TABLE_NAME.toLowerCase() + "/site" + "/*", FAVOURITES_SITE);
 
-		QUESTIONS_PROJECTION_MAP = new HashMap<String, String>();
-		QUESTIONS_PROJECTION_MAP.put(QUESTION_ID, "question_id");
-		QUESTIONS_PROJECTION_MAP.put(TITLE, "title");
-		QUESTIONS_PROJECTION_MAP.put(TAGS, "tags");
-		QUESTIONS_PROJECTION_MAP.put(VOTES, "votes");
-		QUESTIONS_PROJECTION_MAP.put(ANSWER_COUNT, "answer_count");
-		QUESTIONS_PROJECTION_MAP.put(USER_NAME, "user_name");
-		QUESTIONS_PROJECTION_MAP.put(SITE, "site");
+		FAVOURITES_PROJECTION_MAP = new HashMap<String, String>();
+		FAVOURITES_PROJECTION_MAP.put(QUESTION_ID, "question_id");
+		FAVOURITES_PROJECTION_MAP.put(TITLE, "title");
+		FAVOURITES_PROJECTION_MAP.put(TAGS, "tags");
+		FAVOURITES_PROJECTION_MAP.put(VOTES, "votes");
+		FAVOURITES_PROJECTION_MAP.put(ANSWER_COUNT, "answer_count");
+		FAVOURITES_PROJECTION_MAP.put(USER_NAME, "user_name");
+		FAVOURITES_PROJECTION_MAP.put(SITE, "site");
 
 	}
 }
