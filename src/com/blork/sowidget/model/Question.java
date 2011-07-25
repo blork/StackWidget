@@ -15,6 +15,7 @@ public class Question {
 	private String site;
 	private Integer votes;
 	private Integer answerCount;
+	private String siteName;
 
 	/**
 	 * @param questionId
@@ -55,6 +56,14 @@ public class Question {
 
 	public String getSite() {
 		return site;
+	}
+
+	public String getSiteName() {
+		if (this.siteName == null) {
+			this.siteName = this.site.replaceAll("http://api.", "").replaceAll(".com", "");
+		}
+		
+		return this.siteName;
 	}
 
 	public Integer getVotes() {
