@@ -25,7 +25,7 @@ import com.blork.sowidget.model.Question;
 
 
 public class SiteWrapper {
-	public static final String KEY = "";
+	public static final String KEY = "XSuxd2vSOkedfwPtYYJBYA";
 
 	private URL url;
 	private String site;
