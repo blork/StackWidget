@@ -1,7 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
 <resources>
     <string name="app_name">StackWidget</string>
-    
     <string-array name="updates">
         <item>15 minutes</item>
         <item>30 minutes</item>
@@ -15,8 +14,7 @@
         <item>3</item>
         <item>4</item>
         <item>5</item>
-    </string-array>	
-    
+    </string-array>
     <string-array name="method">
         <item>Full website</item>
         <item>StackMobile (classic)</item>
@@ -27,7 +25,6 @@
         <item>mobile_classic</item>
         <item>mobile_touch</item>
     </string-array>
-    
     <string-array name="sites">
         <item>StackOverflow</item>
         <item>SuperUser</item>
@@ -40,9 +37,8 @@
         <item>serverfault</item>
         <item>stackapps</item>
     </string-array>
-    
-      <string-array name="sort">
-        <item>Hot</item>      
+    <string-array name="sort">
+        <item>Hot</item>
         <item>Activity</item>
         <item>Votes</item>
         <item>Creation</item>
@@ -54,10 +50,8 @@
         <item>votes</item>
         <item>creation</item>
         <item>featured</item>
-    </string-array>	
-    
-     <string-array name="number">
-        <item>10</item>      
+    </string-array>
+    <string-array name="number">
         <item>20</item>
         <item>50</item>
         <item>100</item>
