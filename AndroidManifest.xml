@@ -22,7 +22,11 @@
         </receiver>
         <service android:enabled="true" android:name=".SoService"/>
         <provider
-            android:authorities="com.blork.sowidget.provider.questionscontentprovider" android:name="com.blork.sowidget.provider.QUESTIONSContentProvider"/>
+            android:authorities="com.blork.sowidget.provider.questionscontentprovider" android:name="com.blork.sowidget.provider.QuestionsContentProvider"/>
+        <provider
+            android:authorities="com.blork.sowidget.provider.questionscontentprovider" android:name=".provider.QuestionsContentProvider"/>
+        <provider
+            android:authorities="com.blork.sowidget.provider.favouritescontentprovider" android:name=".provider.FavouritesContentProvider"/>
     </application>
     <uses-sdk android:minSdkVersion="3" android:targetSdkVersion="4"/>
     <uses-permission android:name="android.permission.INTERNET"/>
