@@ -15,6 +15,7 @@ Dependancies
 ---
 - [android-pulltorefresh](https://github.com/johannilsson/android-pulltorefresh)
 - [prettytime](http://ocpsoft.com/prettytime/)
+
 Contributing
 ---
 Feel free to issue a pull request and fix any of the issues that no doubt plague the code.
