@@ -9,6 +9,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.GZIPInputStream;
 
@@ -17,7 +18,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
-import android.content.Context;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -28,14 +28,11 @@ public class SiteWrapper {
 	public static final String KEY = "";
 
 	private URL url;
-	public List<Question> questions;
-	private Context context;
 	private String site;
 
-	static final Double version = 1.0;
+	static final Double version = 1.1;
 	
-	public SiteWrapper(String site, Context ctx){
-		this.context = ctx;
+	public SiteWrapper(String site){
 		this.site = site; 
 	}
 	
@@ -54,9 +51,12 @@ public class SiteWrapper {
 		this.url = new URL(baseUrl);
 	}
 	
-	public void fetchQuestions() throws JSONException, IOException{
+	public List<Question> fetchQuestions() throws JSONException, IOException{
+		List<Question> questions = new ArrayList<Question>();
+		
         JSONObject json = (JSONObject) new JSONTokener(getJSON(this.url)).nextValue();
         JSONArray questionsJson = json.getJSONArray("questions");
+        
         
         for(int x = 0; x < questionsJson.length(); x++){ 
 			try {
@@ -91,14 +91,15 @@ public class SiteWrapper {
 				);
 				
 				//TODO: delete old questions
-				question.save(context);
 				
-				this.questions.add(question);
+				questions.add(question);
 				
 			} catch (JSONException e) {
 				Log.e("sowidget", e.toString());
 			}
 		}
+        
+        return questions;
 	}
 	
 	
