@@ -133,7 +133,6 @@ public class SoService extends Service implements Runnable{
 				notification.setLatestEventInfo(context, "StackWidget: No questions found!", "Try removing some of your tags.", contentIntent);
 				mNotificationManager.notify(2, notification);
 				
-				questions.addAll(QuestionFactory.getSaved(this)); //If we didnt fetch new questions, use old ones
 			}
 			
 			Date now = new Date();
@@ -144,8 +143,7 @@ public class SoService extends Service implements Runnable{
 			
 			sendBroadcast(new Intent(ACTION_NEW_STACKWIDGET_QUESTIONS));    
 			
-			
-			Question topQuestion = questions.get(0);
+			Question topQuestion = QuestionFactory.getSaved(this).get(0);
 			
 			RemoteViews views = new RemoteViews(this.getPackageName(), R.layout.widget);
 	        
@@ -155,8 +153,8 @@ public class SoService extends Service implements Runnable{
 	        views.setViewVisibility(R.id.loading, View.GONE);
 	        
 	        views.setTextViewText(R.id.title, topQuestion.getTitle());
-	        views.setTextViewText(R.id.votes, topQuestion.getVotes().toString());
-	        views.setTextViewText(R.id.answers, topQuestion.getAnswerCount().toString());
+	        views.setTextViewText(R.id.votes, topQuestion.getVotes().toString() + " votes");
+	        views.setTextViewText(R.id.answers, topQuestion.getAnswerCount().toString() + " answers");
 	        
 	        String[] tag = topQuestion.getTags().split(",");
 	        views.setTextViewText(R.id.tags, tag[0]); 
