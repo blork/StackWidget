@@ -9,13 +9,12 @@ Features
 - Supports all StackExchange sites
 - Homescreen Widget
 - Multiple options for viewing questions
-- Endless loading
 - Pull-to-refresh
 
 Dependancies
 ---
-[cwac-endless](https://github.com/commonsguy/cwac-endless) for endlessly scrolling lists
-
+- [android-pulltorefresh](https://github.com/johannilsson/android-pulltorefresh)
+- [prettytime](http://ocpsoft.com/prettytime/)
 Contributing
 ---
 Feel free to issue a pull request and fix any of the issues that no doubt plague the code.
