@@ -23,12 +23,12 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.blork.sowidget.adapter.EndlessQuestionAdapter;
+import com.blork.sowidget.adapter.QuestionAdapter;
 import com.blork.sowidget.model.Question;
 import com.blork.sowidget.model.QuestionFactory;
 import com.markupartist.android.widget.PullToRefreshListView;
@@ -41,10 +41,8 @@ public class QuestionList extends ListActivity {
 
 	private ListView lv;
 	BroadcastReceiver updateReceiver;
-	String url;
-	String site;
 	private List<Question> questionList;
-	private EndlessQuestionAdapter listAdapter;
+	private ListAdapter listAdapter;
 
 
 	/** Called when the activity is first created. */
@@ -68,30 +66,33 @@ public class QuestionList extends ListActivity {
 		lv.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				onClick(position, ((TextView) view.findViewById(R.id.id)).getText());
-
-			}
-
-			private void onClick(int position, CharSequence qID) {
-				//Intent viewIntent = new Intent("android.intent.action.VIEW", Uri.parse("http://"+stackExchangeSite+".com/questions/"+qID+"/"));  
 
 				Intent viewIntent;
 				Boolean droidstack = prefs.getBoolean("droidstack", false);
-
-
+				Question clickedQuestion = questionList.get(position-1);
+					
+				Log.e("sowidget", clickedQuestion.getSite());
+				
 				if(droidstack){
-					viewIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("droidstack://question?endpoint="+Uri.encode(url)+"&qid="+qID));
+					viewIntent = new Intent(Intent.ACTION_VIEW, 
+							Uri.parse("droidstack://question?endpoint="+Uri.encode(clickedQuestion.getSite())+"&qid="+clickedQuestion.getQuestionId()));
 				}else{
 					String method = prefs.getString("method", "full");
 
 					Uri uri = null;
 
 					if(method.equals("mobile_classic")) {
-						uri = Uri.parse("http://stackmobile.com/old_version/view_question.php?site=" + site + "&id=" + qID);
+						uri = Uri.parse("http://stackmobile.com/old_version/view_question.php?site=" 
+								+ clickedQuestion.getSiteName() 
+								+ "&id=" 
+								+ clickedQuestion.getQuestionId());
 					} else if(method.equals("mobile_touch")) {
-						uri = Uri.parse("http://stackmobile.com/" + site + ".com/questions/view/?id=" + qID);
+						uri = Uri.parse("http://stackmobile.com/" 
+								+ clickedQuestion.getSiteName()
+								+ ".com/questions/view/?id=" 
+								+ clickedQuestion.getQuestionId());
 					} else {
-						uri = Uri.parse("http://" + site + ".com/questions/" + qID);
+						uri = Uri.parse("http://" + clickedQuestion.getSiteName() + ".com/questions/" + clickedQuestion.getQuestionId());
 					}
 
 					viewIntent = new Intent("android.intent.action.VIEW", uri);  
@@ -102,8 +103,8 @@ public class QuestionList extends ListActivity {
 		});
 
 		questionList = QuestionFactory.getSaved(this);
-		Log.e("sowidget", questionList.toString());
-		listAdapter = new EndlessQuestionAdapter(this, questionList);
+		//listAdapter = new EndlessQuestionAdapter(this, questionList);
+		listAdapter = new QuestionAdapter(this, R.layout.question_list_item, questionList);
 		setListAdapter(listAdapter);
 
 		updateReceiver = new UpdateReceiver();
@@ -121,9 +122,9 @@ public class QuestionList extends ListActivity {
 		PrettyTime pt = new PrettyTime();
 		String timeString = "Last updated: " + pt.format(lastUpdate);
 		((PullToRefreshListView) lv).setLastUpdated(timeString);
-		
-		url = prefs.getString("sites", "http://api.stackoverflow.com");
-		site = url.replaceAll("http://api.", "").replaceAll(".com", "");
+
+		String url = prefs.getString("sites", "http://api.stackoverflow.com");
+		String site = url.replaceAll("http://api.", "").replaceAll(".com", "");
 
 
 		String tags = prefs.getString("tags", "all");
@@ -155,10 +156,10 @@ public class QuestionList extends ListActivity {
 
 			questionList.addAll(QuestionFactory.getSaved(QuestionList.this));
 
-			listAdapter.notifyDataSetChanged();
+			//listAdapter.notifyDataSetChanged();
 
 			((PullToRefreshListView) lv).onRefreshComplete();
-			
+
 			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(QuestionList.this);	
 
 			Date lastUpdate = new Date(prefs.getLong("time", new Date().getTime()));
@@ -219,8 +220,8 @@ public class QuestionList extends ListActivity {
 
 		AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
 
-		int index = info.position;
-		
+		int index = info.position-1;
+
 		Question clickedQuestion = questionList.get(index);
 
 		String site = ((String) clickedQuestion.getSite()).replaceAll("http://api.", "").replaceAll(".com", "");
@@ -228,13 +229,13 @@ public class QuestionList extends ListActivity {
 		switch (item.getItemId()) {
 		case 1:
 			boolean faved = clickedQuestion.addToFavorites(this);
-			
+
 			if (faved) {
 				Toast.makeText(QuestionList.this, "Saved.", Toast.LENGTH_LONG).show();
 			} else {
 				Toast.makeText(QuestionList.this, "Already favourited.", Toast.LENGTH_LONG).show();
 			}
-			
+
 			return true;
 		case 2:
 			Intent shareIntent = new Intent(android.content.Intent.ACTION_SEND);
