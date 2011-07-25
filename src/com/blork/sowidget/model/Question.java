@@ -1,5 +1,6 @@
 package com.blork.sowidget.model;
 
+import com.blork.sowidget.provider.FavouritesContentProvider;
 import com.blork.sowidget.provider.QuestionsContentProvider;
 
 import android.content.ContentValues;
@@ -14,7 +15,7 @@ public class Question {
 	private String site;
 	private Integer votes;
 	private Integer answerCount;
-	
+
 	/**
 	 * @param questionId
 	 * @param title
@@ -63,7 +64,7 @@ public class Question {
 	public Integer getAnswerCount() {
 		return answerCount;
 	}
-	
+
 	public Uri save(Context context) {
 		ContentValues values = new ContentValues();
 
@@ -77,5 +78,35 @@ public class Question {
 
 		Uri uri = context.getContentResolver().insert(QuestionsContentProvider.CONTENT_URI, values);
 		return uri;
+	}
+
+	public boolean addToFavorites(Context context) {
+		ContentValues values = new ContentValues();
+
+		values.put(FavouritesContentProvider.QUESTION_ID, this.questionId);
+		values.put(FavouritesContentProvider.TITLE, this.title);
+		values.put(FavouritesContentProvider.TAGS, this.tags);
+		values.put(FavouritesContentProvider.USER_NAME, this.userName);
+		values.put(FavouritesContentProvider.SITE, this.site);
+		values.put(FavouritesContentProvider.VOTES, this.votes);
+		values.put(FavouritesContentProvider.ANSWER_COUNT, this.answerCount);
+
+		try {
+			context.getContentResolver().insert(FavouritesContentProvider.CONTENT_URI, values);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+
+		return true;
+	}
+
+	public boolean removeFromFavourites(Context context) {
+		int deletedRows = context.getContentResolver().delete(
+				FavouritesContentProvider.CONTENT_URI, 
+				FavouritesContentProvider.QUESTION_ID + " = " + this.questionId, 
+				null
+		);
+		return deletedRows == 1;
 	}
 }

@@ -219,26 +219,28 @@ public class QuestionList extends ListActivity {
 
 		AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
 
-		RelativeLayout rl = (RelativeLayout) info.targetView;
-		TextView id = (TextView)rl.getChildAt(5);
-		TextView site = (TextView)rl.getChildAt(6);
-		TextView title = (TextView)rl.getChildAt(0);
+		int index = info.position;
+		
+		Question clickedQuestion = questionList.get(index);
 
-		int questionId = Integer.parseInt(id.getText().toString());
-		String name = site.getText().toString();
-		name = ((String) name).replaceAll("http://api.", "").replaceAll(".com", "");
-		String titleText = title.getText().toString();
-
+		String site = ((String) clickedQuestion.getSite()).replaceAll("http://api.", "").replaceAll(".com", "");
 
 		switch (item.getItemId()) {
 		case 1:
-			//new FavouriteTask().execute(questionId);				
+			boolean faved = clickedQuestion.addToFavorites(this);
+			
+			if (faved) {
+				Toast.makeText(QuestionList.this, "Saved.", Toast.LENGTH_LONG).show();
+			} else {
+				Toast.makeText(QuestionList.this, "Already favourited.", Toast.LENGTH_LONG).show();
+			}
+			
 			return true;
 		case 2:
 			Intent shareIntent = new Intent(android.content.Intent.ACTION_SEND);
 			shareIntent.setType("text/plain");
-			shareIntent.putExtra(android.content.Intent.EXTRA_TITLE, titleText);
-			shareIntent.putExtra(android.content.Intent.EXTRA_TEXT, "http://"+name+".com/questions/"+questionId);
+			shareIntent.putExtra(android.content.Intent.EXTRA_TITLE, clickedQuestion.getTitle());
+			shareIntent.putExtra(android.content.Intent.EXTRA_TEXT, "http://"+site+".com/questions/"+clickedQuestion.getQuestionId());
 			startActivity(Intent.createChooser(shareIntent, "Share question")); 
 			return true;
 		default:
