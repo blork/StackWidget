@@ -23,7 +23,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -42,7 +41,7 @@ public class QuestionList extends ListActivity {
 	private ListView lv;
 	BroadcastReceiver updateReceiver;
 	private List<Question> questionList;
-	private ListAdapter listAdapter;
+	private QuestionAdapter listAdapter;
 
 
 	/** Called when the activity is first created. */
@@ -103,6 +102,10 @@ public class QuestionList extends ListActivity {
 		});
 
 		questionList = QuestionFactory.getSaved(this);
+		
+		if (questionList.isEmpty())
+			startService(new Intent(this, SoService.class));
+		
 		//listAdapter = new EndlessQuestionAdapter(this, questionList);
 		listAdapter = new QuestionAdapter(this, R.layout.question_list_item, questionList);
 		setListAdapter(listAdapter);
@@ -152,14 +155,21 @@ public class QuestionList extends ListActivity {
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			Log.d("sowidget", "QuestionList got broadcast");
+			boolean hadQuestions = !questionList.isEmpty();
+			
 			questionList.clear();
-
 			questionList.addAll(QuestionFactory.getSaved(QuestionList.this));
 
-			//listAdapter.notifyDataSetChanged();
-
 			((PullToRefreshListView) lv).onRefreshComplete();
+			
+			
 
+			if (!hadQuestions) {
+				listAdapter.notifyDataSetChanged();
+				lv.requestFocusFromTouch();
+				lv.setSelection(1);
+			} 
+			
 			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(QuestionList.this);	
 
 			Date lastUpdate = new Date(prefs.getLong("time", new Date().getTime()));
@@ -249,63 +259,5 @@ public class QuestionList extends ListActivity {
 		}
 	}
 
-
-	//	 private class FavouriteTask extends AsyncTask<Integer, Void, Integer> {
-	//			protected Integer doInBackground(Integer... params) {
-	//				int questionId = params[0];
-	//				
-	//				Cursor favCursor = db.query("favourites", new String[] {_ID, "q_id, title, tags, votes, answer_count, user_name, site"}, 
-	//		                "q_id = "+questionId, null, null, null, null);
-	//				startManagingCursor(favCursor);
-	//				
-	//				favCursor.moveToFirst();
-	//				int dupe = favCursor.getCount();
-	//				
-	//				if(dupe == 0){
-	//					Cursor questionCursor = db.query("questions", new String[] {_ID, "q_id, title, tags, votes, answer_count, user_name, site"}, 
-	//			                "q_id = "+questionId, null, null, null, null);
-	//					startManagingCursor(questionCursor);
-	//					
-	//					questionCursor.moveToFirst();
-	//					
-	//					
-	//					ContentValues values = new ContentValues();
-	//			
-	//					
-	//					values.put("q_id", questionId);
-	//					values.put("title", questionCursor.getString(questionCursor.getColumnIndex("title")));
-	//					values.put("tags", questionCursor.getString(questionCursor.getColumnIndex("tags")));
-	//					values.put("votes", questionCursor.getString(questionCursor.getColumnIndex("votes")));
-	//					values.put("answer_count", questionCursor.getString(questionCursor.getColumnIndex("answer_count")));
-	//					values.put("user_name", questionCursor.getString(questionCursor.getColumnIndex("user_name")));
-	//					values.put("site", questionCursor.getString(questionCursor.getColumnIndex("site")));
-	//					try { 
-	//						db.insertOrThrow("favourites", null, values);
-	//						return 0;
-	//					} catch (SQLException e) { 
-	//						Log.e("sowidget", e.toString());
-	//						return 1;
-	//					}
-	//				}else{
-	//					return 2;
-	//				}
-	//				
-	//				
-	//			}
-	//
-	//
-	//	     protected void onPostExecute(Integer result) {
-	//	    	 if(result == 0){
-	//	    		 Toast.makeText(QuestionList.this, "Saved.", Toast.LENGTH_LONG).show();
-	//	    	 }else if(result == 2){
-	//	    		 Toast.makeText(QuestionList.this, "Already favourited.", Toast.LENGTH_LONG).show();
-	//	    	 }else{
-	//	    		 Toast.makeText(QuestionList.this, "Unable to save this question.", Toast.LENGTH_LONG).show();
-	//	    	 }
-	//	     }
-	//	     
-	//	 
-	//
-	//	 }
 }
 
