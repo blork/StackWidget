@@ -103,7 +103,6 @@ public class Settings extends PreferenceActivity implements Runnable {
 			sites.setEntries(names);
 			sites.setEntryValues(urls);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
 			db.close();
