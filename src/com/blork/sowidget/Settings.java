@@ -75,7 +75,7 @@ public class Settings extends PreferenceActivity implements Runnable {
 	protected void onResume(){
 		super.onResume();
 		
-		QuestionData qs = new QuestionData(this);
+		SiteData qs = new SiteData(this);
 		SQLiteDatabase db = qs.getReadableDatabase();
 		try {
 			sites = (ListPreference) findPreference("sites");
@@ -125,7 +125,7 @@ public class Settings extends PreferenceActivity implements Runnable {
 	public void run() {
 		URL url;
 		
-    	QuestionData qData = new QuestionData(Settings.this);
+    	SiteData qData = new SiteData(Settings.this);
 		SQLiteDatabase db = qData.getWritableDatabase();
 		
 		try {

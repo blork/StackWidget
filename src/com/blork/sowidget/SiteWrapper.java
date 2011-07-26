@@ -30,7 +30,7 @@ public class SiteWrapper {
 	private URL url;
 	private String site;
 
-	static final Double version = 1.1;
+	public static final Double VERSION = 1.1;
 	
 	public SiteWrapper(String site){
 		this.site = site; 
@@ -38,9 +38,9 @@ public class SiteWrapper {
 	
 	public void setURL(String sort, Boolean body, Boolean answers, String[] tags, int num) throws MalformedURLException, UnsupportedEncodingException{
 		String tagged = TextUtils.join(";", tags);
-		Log.d("sowidget", sort+" "+body+" "+answers+" "+tagged+" "+num+" "+SiteWrapper.version);
+		Log.d("sowidget", sort+" "+body+" "+answers+" "+tagged+" "+num+" "+SiteWrapper.VERSION);
 
-		String baseUrl = site+"/"+SiteWrapper.version+"/questions" 
+		String baseUrl = site+"/"+SiteWrapper.VERSION+"/questions" 
 														+"?key="+SiteWrapper.KEY
 														+"&sort="+sort
 														+"&body="+body

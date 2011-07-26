@@ -1,11 +1,19 @@
 package com.blork.sowidget.model;
 
-import com.blork.sowidget.provider.FavouritesContentProvider;
-import com.blork.sowidget.provider.QuestionsContentProvider;
+import java.net.URL;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.json.JSONTokener;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.net.Uri;
+import android.util.Log;
+
+import com.blork.sowidget.SiteWrapper;
+import com.blork.sowidget.provider.FavouritesContentProvider;
+import com.blork.sowidget.provider.QuestionsContentProvider;
 
 public class Question {
 	private Integer questionId;
@@ -62,7 +70,7 @@ public class Question {
 		if (this.siteName == null) {
 			this.siteName = this.site.replaceAll("http://api.", "").replaceAll(".com", "");
 		}
-		
+
 		return this.siteName;
 	}
 
@@ -123,4 +131,52 @@ public class Question {
 	public String toString() {
 		return "Question [questionId=" + questionId + ", title=" + title + "]";
 	}
+
+	public Boolean hasNewAnswers(Context context) {
+		try { 
+			URL url = new URL(
+					this.site
+					+ "/"
+					+ SiteWrapper.VERSION
+					+ "/questions/"
+					+ this.questionId
+					+ "?key="
+					+ SiteWrapper.KEY
+			);
+
+
+			JSONObject json = (JSONObject) new JSONTokener(SiteWrapper.getJSON(url)).nextValue();
+			JSONArray questions = json.getJSONArray("questions");
+
+			JSONObject question =  questions.getJSONObject(0);
+
+			int newAnswerCount = question.getInt("answer_count");
+
+			if(newAnswerCount > this.answerCount) {
+				this.updateAnswerCount(newAnswerCount, context);
+				return true;
+			}
+
+		} catch (Exception e) {}
+
+		return false;
+	}
+
+	public void updateAnswerCount(int newAnswerCount, Context context) {
+		ContentValues values = new ContentValues();
+		values.put(FavouritesContentProvider.ANSWER_COUNT, this.answerCount);
+
+		try {
+			context.getContentResolver().update(
+					FavouritesContentProvider.CONTENT_URI, 
+					values,
+					FavouritesContentProvider.QUESTION_ID + " = " + this.questionId, 
+					null
+			);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
+
 }
