@@ -162,8 +162,6 @@ public class QuestionList extends ListActivity {
 
 			((PullToRefreshListView) lv).onRefreshComplete();
 			
-			
-
 			if (!hadQuestions) {
 				listAdapter.notifyDataSetChanged();
 				lv.requestFocusFromTouch();

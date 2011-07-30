@@ -2,7 +2,6 @@ package com.blork.sowidget;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.util.Date;
 import java.util.List;
 
 import org.json.JSONException;
@@ -135,8 +134,7 @@ public class SoService extends Service implements Runnable{
 
 			}
 
-			Date now = new Date();
-			long time = now.getTime();
+			long time = System.currentTimeMillis();
 			Editor editor = prefs.edit();
 			editor.putLong("time", time);
 			editor.commit();
