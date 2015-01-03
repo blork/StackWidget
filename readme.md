@@ -11,7 +11,7 @@ Features
 - Multiple options for viewing questions
 - Pull-to-refresh
 
-Dependancies
+Dependencies
 ---
 - [android-pulltorefresh](https://github.com/johannilsson/android-pulltorefresh)
 - [prettytime](http://ocpsoft.com/prettytime/)
